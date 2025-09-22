@@ -1,56 +1,105 @@
-// Quick sort
-
 #include <iostream>
-#include <vector>
-
 using namespace std;
 
-int main() {
-    int size;
+class QuickSorter {
+private:
+    int arr[100];
+    int n;
 
-    cout << "Enter the length of array : ";
-    cin >> size;
-
-    vector<int> arr(size, 0);
-
-    for (int i = 0; i < size; i++) {
-        cout << "Enter the value of array : ";
-        cin >> arr[i];
+    void swap(int &a, int &b) {
+        int temp = a;
+        a = b;
+        b = temp;
     }
 
-    cout << "---------------------Before---------------------" << endl;
-    for (int val : arr) {
-        cout << val << " ";
-    }
+    int partition(int low, int high) {
+        int pivot = arr[high];
+        int i = low - 1;
 
-    int count = 0;
-
-    for(int i = 1; i < size; i++) {
-        int key = arr[i];
-        int j = i-1;
-        while (j >= 0) {
-            if(arr[j] > key) {
-                arr[j+1] = arr[j];
-                j--;
-            } else {
-                break;
+        for (int j = low; j < high; j++) {
+            if (arr[j] <= pivot) {
+                i++;
+                swap(arr[i], arr[j]);
             }
         }
-        arr[j+1] = key;
-        count++;
+        swap(arr[i + 1], arr[high]);
+        return i + 1;
     }
 
-    cout << endl;
-    
-    cout << "---------------------After---------------------" << endl;
-    
-    for (int val : arr) {
-        cout << val << " ";
+    void quickSort(int low, int high) {
+        if (low < high) {
+            int pi = partition(low, high);
+            quickSort(low, pi - 1);
+            quickSort(pi + 1, high);
+        }
     }
 
-    cout << endl;
-    
-    cout << "counts : " << count << endl;
+public:
+    QuickSorter() {
+        n = 0;
+    }
+
+    void inputElements() {
+        cout << "Enter number of elements: ";
+        cin >> n;
+        cout << "Enter " << n << " elements: ";
+        for (int i = 0; i < n; i++) {
+            cin >> arr[i];
+        }
+    }
+
+    void display() {
+        if (n == 0) {
+            cout << "No elements to display.\n";
+            return;
+        }
+        cout << "Array elements: ";
+        for (int i = 0; i < n; i++) {
+            cout << arr[i] << " ";
+        }
+        cout << endl;
+    }
+
+    void sortArray() {
+        if (n == 0) {
+            cout << "No elements to sort.\n";
+            return;
+        }
+        quickSort(0, n - 1);
+        cout << "Array sorted successfully!\n";
+    }
+};
+
+int main() {
+    QuickSorter qs;
+    int choice;
+
+    do {
+        cout << "\n--- Quick Sort Menu ---\n";
+        cout << "1. Input Elements\n";
+        cout << "2. Display Elements\n";
+        cout << "3. Sort Elements (Quick Sort)\n";
+        cout << "4. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                qs.inputElements();
+                break;
+            case 2:
+                qs.display();
+                break;
+            case 3:
+                qs.sortArray();
+                break;
+            case 4:
+                cout << "Exiting program...\n";
+                break;
+            default:
+                cout << "Invalid choice! Please try again.\n";
+        }
+    } while (choice != 4);
 
     return 0;
 }
